@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class challenge extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+		'overs',
+        'runs'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }

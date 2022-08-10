@@ -9,6 +9,21 @@ class question extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'point_category_id',
+		'Qn',
+		'option_1',
+		'option_2',
+		'option_3',
+		'option_4',
+		'correct_option'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
     public function answers()
     {
         return $this->hasMany(answer::class);

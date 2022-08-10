@@ -9,6 +9,16 @@ class point_category extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'points'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
     public function questions()
     {
         return $this->hasMany(question::class);

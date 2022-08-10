@@ -9,6 +9,16 @@ class user_point extends Model
 {
     use HasFactory;
 
+     protected $fillable = [
+        'user_id',
+        'points',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

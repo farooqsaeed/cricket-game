@@ -9,6 +9,16 @@ class team extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'logo',
+        'name'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
     public function events()
     {
         return $this->belongsToMany(event::class);
