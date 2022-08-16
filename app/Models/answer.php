@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class answer extends Model
+class Answer extends Model
 {
     use HasFactory;
 
     protected $fillable = [
 		'user_id',
 		'question_id',
-		'respond_answer'
+		'respond_answer',
+        'status'
     ];
 
     protected $hidden = [
@@ -22,7 +23,7 @@ class answer extends Model
 
     public function question()
     {
-        return $this->belongsTo(question::class);
+        return $this->belongsTo(Question::class);
     }
 }
 

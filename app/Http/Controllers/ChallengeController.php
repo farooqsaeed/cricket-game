@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Challenge;
+use Validator;
 
 class ChallengeController extends Controller
 {
@@ -13,7 +18,11 @@ class ChallengeController extends Controller
      */
     public function index()
     {
-        //
+       $response = Challenge::all()->random(1);
+       return json_encode([
+        'message'=>'record found!',
+        'success'=>$response
+       ],200);
     }
 
     /**
@@ -24,7 +33,27 @@ class ChallengeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'balls' => 'required',
+            'runs'=> 'required',
+         ]);
+   
+        if($validator->fails()){
+            $errors = $validator->errors();
+            return json_encode(['status'=>0,'errors'=>$errors]);
+        }
+
+        $challenge = Challenge::create(
+            array(
+                'balls' => $request->balls,
+                'runs' => $request->runs
+            )
+        );
+
+        return json_encode([
+            'message'=>'challenge registered successfully',
+            'success'=>$challenge
+        ],200);
     }
 
     /**

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class team extends Model
+class Team extends Model
 {
     use HasFactory;
 
@@ -19,13 +19,13 @@ class team extends Model
         'updated_at'
     ];
 
-    public function events()
+    public function event()
     {
-        return $this->belongsToMany(event::class);
+        return $this->belongsTo(Event::class);
     }
 
     public function players()
     {
-        return $this->hasMany(player::class);
+        return $this->hasMany(Player::class);
     }
 }

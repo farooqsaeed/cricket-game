@@ -13,11 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_points', function (Blueprint $table) {
+        Schema::create('gamers', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('points');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('profile_image')->nullable();
+            $table->string('name');
+            $table->string('nick');
+            $table->string('city');
+            $table->string('country');
+            $table->string('phone')->unique();
+            $table->string('fvt_team');
+            $table->string('type');
             $table->timestamps();
         });
     }
@@ -29,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_points');
+        Schema::dropIfExists('gamers');
     }
 };

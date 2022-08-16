@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class schedule extends Model
+class Schedule extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'team_1',
-		'team_2',
-		'date_at',
-		'time_at',
-		'avenue',
-		'event_id',
-		'time_stamp'
+        'team_2',
+        'date_at',
+        'time_at',
+        'avenue',
+        'event_id',
+        'time_stamp'
     ];
 
     protected $hidden = [
@@ -26,6 +26,17 @@ class schedule extends Model
 
     public function event()
     {
-        return $this->belongsTo(event::class);
+        return $this->belongsTo(Event::class);
     }
+
+    public function questions()
+    {
+        return $this->belongsToMany(Question::class);
+    }
+
+    public function gamers() {
+     
+        return $this->belongsToMany(Gamer::class,'gamer_schedules');
+            
+     }
 }

@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('players', function (Blueprint $table) {
+        Schema::create('gamer_points', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('team_id');
-            $table->string('name');
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->unsignedBigInteger('gamer_id');
+            $table->integer('points');
+            $table->foreign('gamer_id')->references('id')->on('gamers')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('players');
+        Schema::dropIfExists('gamer_points');
     }
 };

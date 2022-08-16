@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Validator;
 
 class UserController extends Controller
 {
@@ -13,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+       
     }
 
     /**
@@ -24,7 +27,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         
     }
 
     /**

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('date_at');
             $table->string('time_at');
             $table->string('avenue');
-            $table->integer('event_id');
+            $table->unsignedBigInteger('event_id');
             $table->string('time_stamp');
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->timestamps();

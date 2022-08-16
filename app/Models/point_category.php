@@ -21,6 +21,6 @@ class point_category extends Model
 
     public function questions()
     {
-        return $this->hasMany(question::class);
+        return $this->hasMany(Question::class);
     }
 }

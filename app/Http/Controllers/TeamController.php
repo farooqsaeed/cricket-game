@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Team;
+use Validator;
 
 class TeamController extends Controller
 {
@@ -13,7 +17,11 @@ class TeamController extends Controller
      */
     public function index()
     {
-        //
+        $teams = Team::orderBy('id', 'desc')->get();
+        return json_encode([
+            'message'=>'record found!',
+            'success'=>$teams
+        ],200);
     }
 
     /**
@@ -24,7 +32,25 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+         ]);
+   
+        if($validator->fails()){
+            $errors = $validator->errors();
+            return json_encode(['status'=>0,'errors'=>$errors]);
+        }
+
+        $team = Team::create(
+            array(
+                'name' => $request->name,
+            )
+        );
+
+        return json_encode([
+            'message'=>'team created successfully',
+            'success'=>$team
+        ],200);
     }
 
     /**

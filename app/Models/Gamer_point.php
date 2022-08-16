@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class user_point extends Model
+class Gamer_point extends Model
 {
     use HasFactory;
 
-     protected $fillable = [
-        'user_id',
+    protected $fillable = [
+        'gamer_id',
         'points',
     ];
 
@@ -19,8 +19,8 @@ class user_point extends Model
         'updated_at'
     ];
 
-    public function user()
+    public function gamer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Gamer::class);
     }
 }
