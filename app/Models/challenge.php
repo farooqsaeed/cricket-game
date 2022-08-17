@@ -10,7 +10,7 @@ class Challenge extends Model
     use HasFactory;
 
     protected $fillable = [
-		'balls',
+		'overs',
         'runs'
     ];
 

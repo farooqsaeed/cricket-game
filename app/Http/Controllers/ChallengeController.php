@@ -34,7 +34,7 @@ class ChallengeController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'balls' => 'required',
+            'overs' => 'required',
             'runs'=> 'required',
          ]);
    
@@ -45,7 +45,7 @@ class ChallengeController extends Controller
 
         $challenge = Challenge::create(
             array(
-                'balls' => $request->balls,
+                'overs' => $request->overs,
                 'runs' => $request->runs
             )
         );

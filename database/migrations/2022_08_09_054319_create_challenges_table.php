@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('challenges', function (Blueprint $table) {
             $table->id();
-            $table->integer('balls');
+            $table->integer('overs');
             $table->integer('runs');
             $table->timestamps();
         });
