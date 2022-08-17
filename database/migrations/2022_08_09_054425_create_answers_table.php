@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('gamer_id');
             $table->unsignedBigInteger('question_id');
             $table->string('respond_answer');
-            $table->boolean('status')->nullable();
+            $table->boolean('status')->default(false);
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
             $table->timestamps();
         });

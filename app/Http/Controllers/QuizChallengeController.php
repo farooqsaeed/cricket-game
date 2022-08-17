@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Answer;
 use App\Models\Question;
-use Validator;
+use App\Models\Challenge;
 
-class AnswerController extends Controller
+class QuizChallengeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +17,14 @@ class AnswerController extends Controller
      */
     public function index()
     {
-        //
+        // ->random(1)
+        $challenge = Challenge::all();
+        $questions = Question::all();
+        $result = array('challenges'=>$challenge,'Questions'=>$questions);
+        return json_encode([
+            'message'=>'record found!',
+            'success'=>$result
+        ],200);
     }
 
     /**
@@ -29,20 +35,7 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        // return Auth::User()->id;
-        foreach($request->answers as $key => $result){
-                Answer::create(
-                    array(
-                        'gamer_id' => Auth::User()->id,
-                        'question_id' => $result['question_id'],
-                        'respond_answer' => $result['respond_answer']
-                    )
-                );
-        }
-
-        return json_encode([
-            'message'=>'Your answeres stored successfully',
-        ],200);
+        //
     }
 
     /**
@@ -65,21 +58,7 @@ class AnswerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $update = Question::where('id','=',$id)->update([
-            'correct_option'=>$request->correct_option
-        ]);
-
-        if($update){
-            Answer::where('question_id','=',$id)
-            ->where('respond_answer','=',$request->correct_option)->update([
-                'status'=>true
-            ]);
-        }
-
-        return json_encode([
-            'message'=>'Record updated successfully',
-        ],200);
-
+        //
     }
 
     /**
@@ -92,4 +71,6 @@ class AnswerController extends Controller
     {
         //
     }
+
+    
 }

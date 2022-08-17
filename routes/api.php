@@ -14,6 +14,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPointsController;
 use App\Http\Controllers\GamerController;
+use App\Http\Controllers\QuizChallengeController;
 
 
 
@@ -27,6 +28,39 @@ use App\Http\Controllers\GamerController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/test',function()
+{
+   $result = array(
+    array(
+    'question_id' =>2,
+    'respond_answer' =>'option_1'
+    ),
+    array(
+    'question_id' =>2,
+    'respond_answer' =>'option_1'
+    ),
+    array(
+    'question_id' =>2,
+    'respond_answer' =>'option_1'
+    ),
+    array(
+    'question_id' =>2,
+    'respond_answer' =>'option_1'
+    )
+  );
+
+  $rstone = json_encode($result);
+  $rst = json_decode($rstone);
+
+  foreach($rst as $v){
+    $ntn[] = $v->question_id;
+  }
+
+  return $ntn;
+
+//   return json_encode($result);
+});
 
 // routes without auth
 // users registartion
@@ -89,6 +123,12 @@ Route::prefix('v1')->group(function () {
         Route::apiResources([
             'team' => TeamController::class,
         ]);
+
+        // team route
+        Route::apiResources([
+            'quiz-challenge' => QuizChallengeController::class,
+        ]);    
+            
     
 });
 
