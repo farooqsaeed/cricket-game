@@ -29,6 +29,7 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'type' => 'required',
             'team_1' => 'required',
             'team_2' => 'required',
             'date_at' => 'required',
@@ -44,6 +45,7 @@ class ScheduleController extends Controller
 
         $schedule = Schedule::create(
             array(
+                'type' => $request->type,
                 'team_1' => $request->team_1,
                 'team_2' => $request->team_2,
                 'date_at' => $request->date_at,
