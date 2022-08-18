@@ -19,7 +19,7 @@ class QuizChallengeController extends Controller
     {
         // ->random(1)
         $challenge = Challenge::all();
-        $questions = Question::all();
+        $questions = Question::Select('id','Qn','option_1','option_2','option_3','option_4','type','timebound')->get();
         $result = array('challenges'=>$challenge,'Questions'=>$questions);
         return json_encode([
             'message'=>'record found!',
