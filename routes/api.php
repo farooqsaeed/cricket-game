@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPointsController;
 use App\Http\Controllers\GamerController;
 use App\Http\Controllers\QuizChallengeController;
+use App\Http\Controllers\CountryCityController;
 
 
 
@@ -29,42 +30,20 @@ use App\Http\Controllers\QuizChallengeController;
 |
 */
 
-Route::get('/test',function()
-{
-   $result = array(
-    array(
-    'question_id' =>2,
-    'respond_answer' =>'option_1'
-    ),
-    array(
-    'question_id' =>2,
-    'respond_answer' =>'option_1'
-    ),
-    array(
-    'question_id' =>2,
-    'respond_answer' =>'option_1'
-    ),
-    array(
-    'question_id' =>2,
-    'respond_answer' =>'option_1'
-    )
-  );
-
-  $rstone = json_encode($result);
-  $rst = json_decode($rstone);
-
-  foreach($rst as $v){
-    $ntn[] = $v->question_id;
-  }
-
-  return $ntn;
-
-//   return json_encode($result);
-});
 
 // routes without auth
+
+// areas
+
+Route::prefix('v1')->group(function () {
+    Route::apiResources([
+        'countrystates' => CountryCityController::class,
+    ]);
+    
+});
 // users registartion
 Route::prefix('v1')->group(function () {
+    
     Route::prefix('user')->group(function () {
         Route::post('registration',[GamerController::class,'store']);
     });
