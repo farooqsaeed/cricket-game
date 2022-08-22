@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->integer('point_category_id');
-            $table->integer('schedule_id');
             $table->string('Qn');
             $table->string('option_1');
             $table->string('option_2');

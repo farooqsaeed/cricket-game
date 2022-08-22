@@ -36,8 +36,8 @@ class Schedule extends Model
     }
 
     public function gamers() {
-     
-        return $this->belongsToMany(Gamer::class,'gamer_schedules');
-            
-     }
+
+        return $this->belongsToMany(Gamer::class,'gamer_schedules'); 
+
+    }
 }

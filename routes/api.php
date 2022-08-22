@@ -16,6 +16,7 @@ use App\Http\Controllers\UserPointsController;
 use App\Http\Controllers\GamerController;
 use App\Http\Controllers\QuizChallengeController;
 use App\Http\Controllers\CountryCityController;
+use App\Http\Controllers\AuthController;
 
 
 
@@ -39,11 +40,25 @@ Route::prefix('v1')->group(function () {
     Route::apiResources([
         'countrystates' => CountryCityController::class,
     ]);
+
+    Route::apiResources([
+        'user' => UserController::class,
+     ]);
+
+     Route::post('user/auth',[AuthController::class,'doLogin']);
     
 });
 // users registartion
 Route::prefix('v1')->group(function () {
-    
+    // event with schedules
+    Route::get('eventwithschedules',[EventController::class,'eventwithschedule']);
+    Route::apiResources([
+        'game/user' => GamerController::class,
+     ]);
+
+    Route::apiResources([
+        'schedule' => ScheduleController::class,
+    ]);
     Route::prefix('user')->group(function () {
         Route::post('registration',[GamerController::class,'store']);
     });
@@ -54,15 +69,14 @@ Route::prefix('v1')->group(function () {
 Route::group(['middleware'=>['auth:sanctum']],function(){
 
 Route::prefix('v1')->group(function () {
+    
     // gamer route 
         Route::apiResources([
             'game-user' => GamerController::class,
         ]);
     
     // users route
-        Route::apiResources([
-            'user' => UserController::class,
-         ]);
+        
 
     // challenges route
         Route::apiResources([
@@ -94,9 +108,7 @@ Route::prefix('v1')->group(function () {
         ]);
     
     // schedule route
-        Route::apiResources([
-            'schedule' => ScheduleController::class,
-        ]);
+       
     
     // team route
         Route::apiResources([

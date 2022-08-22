@@ -94,7 +94,14 @@ class GamerController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = Gamer::where('id','=',$id)->first();
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return json_encode([
+            'message'=>'user found!',
+            'token'=>$token,
+            'success'=>$user
+        ]);
     }
 
     /**

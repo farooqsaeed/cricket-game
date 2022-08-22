@@ -71,7 +71,11 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        //
+        $result = Question::where('id','=',$id)->withCount('answers')->get();
+        return json_encode([
+            'message'=>'Record Found',
+            'success'=>$result
+        ],200);
     }
 
     /**
@@ -83,7 +87,7 @@ class QuestionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // 
     }
 
     /**

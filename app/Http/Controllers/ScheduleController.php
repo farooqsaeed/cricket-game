@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Schedule;
+use App\Models\Question;
 use Validator;
+use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
@@ -17,7 +19,9 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        $date = Carbon::createFromFormat('Y-m-d', '2021-11-16');
+        $result = Schedule::whereDate('date_at','=',$date)->with('questions')->get();
+        return json_encode(['success'=>$result,'date'=>$startDate],200);
     }
 
     /**
@@ -55,6 +59,10 @@ class ScheduleController extends Controller
                 'time_stamp' => time()
             )
         );
+
+        $question = Question::where('id','=',1)->first();
+
+        $schedule->questions()->attach($question);
 
         return json_encode([
             'message'=>'schedule created successfully',
