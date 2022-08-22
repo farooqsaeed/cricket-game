@@ -18,7 +18,7 @@ class ChallengeController extends Controller
      */
     public function index()
     {
-       $response = Challenge::all()->random(1);
+       $response = Challenge::all();
        return json_encode([
         'message'=>'record found!',
         'success'=>$response
