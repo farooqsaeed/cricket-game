@@ -21,7 +21,7 @@ class ScheduleController extends Controller
     {
         $date = Carbon::createFromFormat('Y-m-d', '2021-11-16');
         $result = Schedule::whereDate('date_at','=',$date)->with('questions')->get();
-        return json_encode(['success'=>$result,'date'=>$startDate],200);
+        return json_encode(['success'=>$result],200);
     }
 
     /**

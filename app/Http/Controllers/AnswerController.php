@@ -31,11 +31,13 @@ class AnswerController extends Controller
     {
         // return Auth::User()->id;
         foreach($request->answers as $key => $result){
+               $result = Question::where('id','=',$result['question_id'])->first();
                 Answer::create(
                     array(
                         'gamer_id' => Auth::User()->id,
                         'question_id' => $result['question_id'],
-                        'respond_answer' => $result['respond_answer']
+                        'respond_answer' => $result['respond_answer'],
+                        'point_category_id' => $result->point_category_id
                     )
                 );
         }

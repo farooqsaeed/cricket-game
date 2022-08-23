@@ -25,6 +25,11 @@ class Answer extends Model
     {
         return $this->belongsTo(Question::class);
     }
+
+    public function point_category()
+    {
+        return $this->belongsTo(point_category::class);
+    }
 }
 
 

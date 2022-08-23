@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
+use App\Models\Answer;
+use App\Models\Schedule;
 use Validator;
 
 class QuestionController extends Controller
@@ -71,10 +73,16 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        $result = Question::where('id','=',$id)->withCount('answers')->get();
+        $answers = Answer::where('status','=',true)
+        ->with(['point_category' => function($query){
+            $query->sum('points');
+         }])->get();
+        // $answers = Question::with('answers')->get();
+        $result = Question::where('id','=',$id)->select('id','Qn')->withCount('answers')->get();
         return json_encode([
             'message'=>'Record Found',
-            'success'=>$result
+            'success'=>$result,
+            'winners'=>$answers
         ],200);
     }
 
