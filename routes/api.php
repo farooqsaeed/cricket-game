@@ -50,6 +50,9 @@ Route::prefix('v1')->group(function () {
 });
 // users registartion
 Route::prefix('v1')->group(function () {
+    Route::apiResources([
+        'question' => QuestionController::class,
+    ]);
     // event with schedules
     Route::get('eventwithschedules',[EventController::class,'eventwithschedule']);
     Route::apiResources([
@@ -103,9 +106,7 @@ Route::prefix('v1')->group(function () {
         ]);
     
     // question route
-        Route::apiResources([
-            'question' => QuestionController::class,
-        ]);
+        
     
     // schedule route
        

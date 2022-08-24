@@ -19,7 +19,11 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+       $result = Question::orderBy('id','DESC')->get();
+       return json_encode([
+            'message'=>'Record Found!',
+            'success'=>$result
+        ],200);
     }
 
     /**
@@ -73,16 +77,42 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
+        $users = array();
+        $usersId = array();
+        $QnId = array();
         $answers = Answer::where('status','=',true)
         ->with(['point_category' => function($query){
             $query->sum('points');
          }])->get();
-        // $answers = Question::with('answers')->get();
-        $result = Question::where('id','=',$id)->select('id','Qn')->withCount('answers')->get();
+
+         $count = count($answers);
+         for ($i=0; $i < $count; $i++) { 
+             
+             if ($i==0) {
+                 $usersId['gamer_id'] = $answers[$i]->gamer_id;
+                 $usersId['points'] = $answers[$i]->point_category->No;
+                 $users[] = $usersId;
+             }else{
+                 if ($answers[$i-1]->gamer_id!=$answers[$i]->gamer_id) {
+                     $usersId['gamer_id'] = $answers[$i]->gamer_id;
+                     $usersId['points'] = $answers[$i]->point_category->No;
+                     $users[] = $usersId;
+                 }
+                 else{
+                     $users[$i-1]['points'] = $users[$i-1]['points']+$answers[$i]->point_category->No;
+                 }
+             }
+        }
+        $schedule = Schedule::where('id','=',$id)->with('questions')->get(); 
+        $items = $schedule[0]->questions;
+        foreach($items as $item){
+            $QnId[] = $item->pivot->question_id;
+        }
+        $result = Question::whereIn('id',$QnId)->select('id','Qn')->withCount('answers')->get();
         return json_encode([
             'message'=>'Record Found',
             'success'=>$result,
-            'winners'=>$answers
+            'winners'=>$users
         ],200);
     }
 
