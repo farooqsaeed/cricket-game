@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Schedule;
+use App\Models\Gamer;
 use Validator;
 
 class QuestionController extends Controller
@@ -89,11 +90,23 @@ class QuestionController extends Controller
          for ($i=0; $i < $count; $i++) { 
              
              if ($i==0) {
-                 $usersId['gamer_id'] = $answers[$i]->gamer_id;
-                 $usersId['points'] = $answers[$i]->point_category->No;
-                 $users[] = $usersId;
+                $gamer = Gamer::where('id','=',$answers[$i]->gamer_id)->first();
+                if (!empty($gamer)) {
+                  $usersId['profile_image'] = $gamer->profile_image; 
+                  $usersId['name'] = $gamer->name; 
+                  $usersId['city'] = $gamer->city;  
+                }
+                $usersId['gamer_id'] = $answers[$i]->gamer_id;
+                $usersId['points'] = $answers[$i]->point_category->No;
+                $users[] = $usersId;
              }else{
                  if ($answers[$i-1]->gamer_id!=$answers[$i]->gamer_id) {
+                        $gamer = Gamer::where('id','=',$answers[$i]->gamer_id)->first();
+                        if (!empty($gamer)) {
+                        $usersId['profile_image'] = $gamer->profile_image; 
+                        $usersId['name'] = $gamer->name; 
+                        $usersId['city'] = $gamer->city;  
+                        }
                      $usersId['gamer_id'] = $answers[$i]->gamer_id;
                      $usersId['points'] = $answers[$i]->point_category->No;
                      $users[] = $usersId;
