@@ -82,7 +82,7 @@ class QuestionController extends Controller
         $QnId = array();
         $answers = Answer::where('status','=',true)
         ->with(['point_category' => function($query){
-            $query->sum('points');
+            $query->sum('No');
          }])->get();
 
          $count = count($answers);
