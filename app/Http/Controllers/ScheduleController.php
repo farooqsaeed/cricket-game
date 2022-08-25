@@ -78,7 +78,11 @@ class ScheduleController extends Controller
      */
     public function show($id)
     {
-        //
+        $schedules = Schedule::where('event_id','=',$id)->get();
+        return json_encode([
+            'message'=>'Record Found!',
+            'success'=>$schedules
+        ],200);
     }
 
     /**
@@ -103,4 +107,6 @@ class ScheduleController extends Controller
     {
         //
     }
+
+    
 }

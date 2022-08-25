@@ -18,7 +18,11 @@ class UserController extends Controller
      */
     public function index()
     {
-       
+       $users = User::with('permissions')->get();
+       return json_encode([
+        'message'=>'Record Found!',
+        'success'=>$users
+        ],200);
     }
 
     /**
@@ -72,7 +76,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::where('id','=',$id)->with('permissions')->first();
+        return json_encode([
+            'message'=>'Record Found!',
+            'success'=>$user
+            ],200);
     }
 
     /**
@@ -84,7 +92,16 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        User::where('id','=',$id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+            
+        ]);
+
+        return json_encode([
+            'message'=>'user updated successfully',
+        ],200);
     }
 
     /**
@@ -95,6 +112,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::where('id','=',$id)->delete();
+
+        return json_encode([
+            'message'=>'user deleted successfully',
+        ],200);
     }
 }

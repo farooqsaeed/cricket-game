@@ -32,6 +32,7 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
+        $path = null;
         $validator = Validator::make($request->all(), [
             'name' => 'required',
          ]);
@@ -41,9 +42,23 @@ class TeamController extends Controller
             return json_encode(['status'=>0,'errors'=>$errors]);
         }
 
+        if ($request->hasFile('logo')){
+            $image = $request->logo;
+            $name = time();
+            $file = $image->getClientOriginalName();
+            $extension = $image->extension();
+            $ImageName = $name.$file;
+            $fileName = md5($ImageName);
+            $fullPath =  $fileName.'.'.$extension;
+            
+            $image->move(public_path('uploads/logo/'),$fullPath);
+            $path = 'uploads/logo/'.$fullPath;
+        }
+
         $team = Team::create(
             array(
                 'name' => $request->name,
+                'logo' => $path
             )
         );
 

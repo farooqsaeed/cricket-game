@@ -76,7 +76,14 @@ class PlayerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Player::where('id','=',$id)->update([
+            'name' => $request->name
+        ]);
+
+        return json_encode([
+            'message'=>'player updated successfully',
+        ],200);
+
     }
 
     /**
@@ -87,6 +94,10 @@ class PlayerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Player::where('id','=',$id)->delete();
+
+        return json_encode([
+            'message'=>'player deleted successfully',
+        ],200);
     }
 }

@@ -20,4 +20,9 @@ class Permission extends Model
         return $this->belongsToMany(User::class,'users_permissions');
             
      }
+
+     protected $hidden = [
+      'created_at',
+      'updated_at'
+  ];
 }

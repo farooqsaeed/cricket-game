@@ -116,12 +116,14 @@ class QuestionController extends Controller
                  }
              }
         }
+        
         $schedule = Schedule::where('id','=',$id)->with('questions')->get(); 
         $items = $schedule[0]->questions;
         foreach($items as $item){
             $QnId[] = $item->pivot->question_id;
         }
         $result = Question::whereIn('id',$QnId)->select('id','Qn')->withCount('answers')->get();
+
         return json_encode([
             'message'=>'Record Found',
             'success'=>$result,

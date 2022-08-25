@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
+use App\Models\Team;
 use Carbon\Carbon;
 use Validator;
 
@@ -28,6 +29,24 @@ class EventController extends Controller
     public function eventwithschedule()
     {
         $events = Event::whereDate('start_date','>=',Carbon::createFromFormat('Y-m-d', date('Y-m-d')))->with('schedules')->orderBy('id', 'desc')->get();
+        return json_encode([
+            'message'=>'record found!',
+            'success'=>$events
+        ],200);
+    }
+
+    public function EventSchedule($id)
+    {
+        $events = Event::where('id','=',$id)->with('schedules')->first();
+        return json_encode([
+            'message'=>'record found!',
+            'success'=>$events
+        ],200);
+    }
+
+    public function EventTeam($id)
+    {
+        $events = Event::where('id','=',$id)->with('teams')->first();
         return json_encode([
             'message'=>'record found!',
             'success'=>$events

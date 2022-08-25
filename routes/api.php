@@ -33,38 +33,21 @@ use App\Http\Controllers\AuthController;
 
 
 // routes without auth
-
-// areas
-
 Route::prefix('v1')->group(function () {
     Route::apiResources([
         'countrystates' => CountryCityController::class,
     ]);
 
-    Route::apiResources([
-        'user' => UserController::class,
-     ]);
+    Route::post('user/auth',[AuthController::class,'doLogin']);
 
-     Route::post('user/auth',[AuthController::class,'doLogin']);
-    
-});
-// users registartion
-Route::prefix('v1')->group(function () {
-    Route::apiResources([
-        'question' => QuestionController::class,
-    ]);
-    // event with schedules
-    Route::get('eventwithschedules',[EventController::class,'eventwithschedule']);
-    Route::apiResources([
-        'game/user' => GamerController::class,
-     ]);
-
-    Route::apiResources([
-        'schedule' => ScheduleController::class,
-    ]);
     Route::prefix('user')->group(function () {
         Route::post('registration',[GamerController::class,'store']);
     });
+
+    Route::apiResources([
+        'game/user' => GamerController::class,
+    ]);
+    
 });
 
 
@@ -73,53 +56,71 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
 Route::prefix('v1')->group(function () {
     
-    // gamer route 
+        // gamer route 
         Route::apiResources([
             'game-user' => GamerController::class,
         ]);
     
-    // users route
+        // users route
+        Route::apiResources([
+            'user' => UserController::class,
+        ]);
         
 
-    // challenges route
+        // challenges route
         Route::apiResources([
             'challenge' => ChallengeController::class,
          ]);
 
-    // answers route
+        // answers route
         Route::apiResources([
             'answer' => AnswerController::class,
         ]);
-    // coin route
+
+        // coin route
         Route::apiResources([
             'coin' => CoinsController::class,
         ]);
    
-    // event route
+        // event route
         Route::apiResources([
             'event' => EventController::class,
         ]);
 
-    // player route
+        // player route
         Route::apiResources([
             'player' => PlayerController::class,
         ]);
+
+        // question route
+        Route::apiResources([
+            'question' => QuestionController::class,
+        ]);
     
-    // question route
-        
-    
-    // schedule route
+        // schedule route
+        Route::apiResources([
+            'schedule' => ScheduleController::class,
+        ]);
        
     
-    // team route
+        // team route
         Route::apiResources([
             'team' => TeamController::class,
-        ]);
+        ]); 
 
         // team route
         Route::apiResources([
             'quiz-challenge' => QuizChallengeController::class,
-        ]);    
+        ]);
+        
+        // event with schedules
+        Route::get('eventwithschedules',[EventController::class,'eventwithschedule']);
+
+        // event with specific schedules
+        Route::get('event/schedule/{id}',[EventController::class,'EventSchedule']);
+
+        // event teams
+        Route::get('event/teams/{id}',[EventController::class,'EventTeam']);
             
     
 });
