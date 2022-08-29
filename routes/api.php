@@ -124,6 +124,8 @@ Route::prefix('v1')->group(function () {
 
         // isGamerExist
         Route::get('isGamer/exist/{id}',[GamerController::class,'isUserExist']);
+        // update team logi
+        Route::post('upload/team/logo/{id}',[GamerController::class,'uploadicon']);
         
             
     
