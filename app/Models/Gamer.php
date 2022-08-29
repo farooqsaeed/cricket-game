@@ -18,7 +18,8 @@ class Gamer extends Model
         'country',
         'phone',
         'fvt_team',
-        'type'
+        'type',
+        'social_id'
     ];
 
     

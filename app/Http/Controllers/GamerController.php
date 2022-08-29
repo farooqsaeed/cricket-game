@@ -42,7 +42,8 @@ class GamerController extends Controller
            'city' => 'required',
            'country' => 'required',
            'phone' => 'required|unique:gamers',
-           'fvt_team'=>'required'
+           'fvt_team'=>'required',
+           'social_id' =>'required'
         ]);
   
        if($validator->fails()){
@@ -74,6 +75,7 @@ class GamerController extends Controller
                'phone' => $request->phone,
                'fvt_team' => $request->fvt_team,
                'type'=>'Free',
+               'social_id'=> $request->social_id
            )
        );
 
@@ -83,7 +85,7 @@ class GamerController extends Controller
            'message'=>'user registered successfully',
            'token'=>$token,
            'success'=>$gamer
-       ]);
+       ],200);
     }
 
     /**
@@ -94,14 +96,14 @@ class GamerController extends Controller
      */
     public function show($id)
     {
-        $user = Gamer::where('id','=',$id)->first();
+        $user = Gamer::where('social_id','=',$id)->first();
         $token = $user->createToken('api-token')->plainTextToken;
 
         return json_encode([
             'message'=>'user found!',
             'token'=>$token,
             'success'=>$user
-        ]);
+        ],200);
     }
 
     /**
@@ -125,5 +127,17 @@ class GamerController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function isUserExist($id)
+    {
+        $user = Gamer::where('id','=',$id)->first();
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return json_encode([
+            'message'=>'user found!',
+            'token'=>$token,
+            'success'=>$user
+        ]);
     }
 }

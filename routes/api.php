@@ -121,6 +121,10 @@ Route::prefix('v1')->group(function () {
 
         // event teams
         Route::get('event/teams/{id}',[EventController::class,'EventTeam']);
+
+        // isGamerExist
+        Route::get('isGamer/exist/{id}',[GamerController::class,'isUserExist']);
+        
             
     
 });

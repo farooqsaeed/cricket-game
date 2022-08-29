@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('fvt_team');
             $table->string('type');
+            $table->string('social_id');
             $table->timestamps();
         });
     }
