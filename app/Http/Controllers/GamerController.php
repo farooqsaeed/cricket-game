@@ -109,7 +109,7 @@ class GamerController extends Controller
 
         return json_encode([
             'message'=>'user record not found!',
-        ],200);
+        ],204);
         
 
         
@@ -154,6 +154,6 @@ class GamerController extends Controller
 
         return json_encode([
             'message'=>'user record not found!',
-        ],200);
+        ],204);
     }
 }
