@@ -101,6 +101,7 @@ class GamerController extends Controller
             $token = $user->createToken('api-token')->plainTextToken;
 
             return json_encode([
+                'status' =>200,
                 'message'=>'user found!',
                 'token'=>$token,
                 'success'=>$user
@@ -108,6 +109,7 @@ class GamerController extends Controller
         }
 
         return json_encode([
+            'status' =>204,
             'message'=>'user record not found!',
         ],204);
         
@@ -146,6 +148,7 @@ class GamerController extends Controller
         if(!empty($user)){
             $token = $user->createToken('api-token')->plainTextToken;
             return json_encode([
+                'status' =>200,
                 'message'=>'user found!',
                 'token'=>$token,
                 'success'=>$user
@@ -153,6 +156,7 @@ class GamerController extends Controller
         }
 
         return json_encode([
+            'status' =>204,
             'message'=>'user record not found!',
         ],204);
     }
