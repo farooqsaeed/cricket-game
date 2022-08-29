@@ -140,7 +140,19 @@ class QuestionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // 
+        Question::where('id','=',$id)->update([
+            'Qn' => $request->Qn,
+            'option_1' => $request->option_1,
+            'option_2' => $request->option_2,
+            'option_3' => $request->option_3,
+            'option_4' => $request->option_4,
+            'timebound' => $request->timebound,
+            'type' => $request->type
+        ]);
+
+        return json_encode([
+            'message'=>'Record Updated Successfully',
+        ],200);
     }
 
     /**
@@ -151,6 +163,10 @@ class QuestionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Question::where('id','=',$id)->delete();
+
+        return json_encode([
+            'message'=>'Record deleted Successfully',
+        ],200);
     }
 }

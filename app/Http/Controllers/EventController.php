@@ -78,7 +78,8 @@ class EventController extends Controller
                 'name' => $request->name,
                 'type' => $request->type,
                 'start_date' => $request->start_date,
-                'end_date' => $request->end_date
+                'end_date' => $request->end_date,
+                'event_id' => $request->event_id
             )
         );
 
