@@ -97,13 +97,22 @@ class GamerController extends Controller
     public function show($id)
     {
         $user = Gamer::where('social_id','=',$id)->first();
-        $token = $user->createToken('api-token')->plainTextToken;
+        if(!empty($user)){
+            $token = $user->createToken('api-token')->plainTextToken;
+
+            return json_encode([
+                'message'=>'user found!',
+                'token'=>$token,
+                'success'=>$user
+            ],200);
+        }
 
         return json_encode([
-            'message'=>'user found!',
-            'token'=>$token,
-            'success'=>$user
+            'message'=>'user record not found!',
         ],200);
+        
+
+        
     }
 
     /**
@@ -132,12 +141,19 @@ class GamerController extends Controller
     public function isUserExist($id)
     {
         $user = Gamer::where('id','=',$id)->first();
-        $token = $user->createToken('api-token')->plainTextToken;
+        
+
+        if(!empty($user)){
+            $token = $user->createToken('api-token')->plainTextToken;
+            return json_encode([
+                'message'=>'user found!',
+                'token'=>$token,
+                'success'=>$user
+            ]);
+        }
 
         return json_encode([
-            'message'=>'user found!',
-            'token'=>$token,
-            'success'=>$user
-        ]);
+            'message'=>'user record not found!',
+        ],200);
     }
 }
