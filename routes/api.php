@@ -34,6 +34,10 @@ use App\Http\Controllers\AuthController;
 
 // routes without auth
 Route::prefix('v1')->group(function () {
+
+    // isGamerExist
+    Route::get('isGamer/exist/{id}',[GamerController::class,'isUserExist']);
+    
     Route::apiResources([
         'countrystates' => CountryCityController::class,
     ]);
@@ -122,8 +126,6 @@ Route::prefix('v1')->group(function () {
         // event teams
         Route::get('event/teams/{id}',[EventController::class,'EventTeam']);
 
-        // isGamerExist
-        Route::get('isGamer/exist/{id}',[GamerController::class,'isUserExist']);
         // update team logi
         Route::post('upload/team/logo/{id}',[TeamController::class,'uploadicon']);
         
