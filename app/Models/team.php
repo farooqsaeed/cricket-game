@@ -11,7 +11,8 @@ class Team extends Model
 
     protected $fillable = [
         'logo',
-        'name'
+        'name',
+        'event_id'
     ];
 
     protected $hidden = [
