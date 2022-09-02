@@ -119,7 +119,7 @@ class TeamController extends Controller
 
     public function TeamWithPlayer()
     {
-       $players = Team::with('players')->select('id','name')->get();
+       $players = Team::with('players')->select('id','name','nick')->get();
 
        $data = array('Teams'=>$players );
 
