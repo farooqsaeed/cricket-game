@@ -125,7 +125,7 @@ class TeamController extends Controller
 
        return json_encode([
         'message'=>'record found',
-        'success'=>$$data
+        'success'=>$data
        ],200);
     }
 }
