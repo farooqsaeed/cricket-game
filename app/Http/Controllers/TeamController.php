@@ -121,8 +121,10 @@ class TeamController extends Controller
     {
        $players = Team::with('players')->select('id','name')->get();
 
+       $data = array('Teams'=>$players );
+
        return json_encode([
-        'success'=>$players
+        'success'=>$$data
        ],200);
     }
 }
