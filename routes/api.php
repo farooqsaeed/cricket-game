@@ -131,7 +131,7 @@ Route::prefix('v1')->group(function () {
         Route::post('upload/team/logo/{id}',[TeamController::class,'uploadicon']);
 
         // team with player
-        Route::get('teams/players',[EventController::class,'TeamWithPlayer']);
+        Route::get('teams/players',[TeamController::class,'TeamWithPlayer']);
          
 });
 
