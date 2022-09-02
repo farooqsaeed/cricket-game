@@ -45,10 +45,27 @@ class GamerController extends Controller
            'fvt_team'=>'required',
            'social_id' =>'required'
         ]);
+        
+        $user = Gamer::where('phone','=',$request->phone)->first();
+        
+
+        if(!empty($user)){
+            $token = $user->createToken('api-token')->plainTextToken;
+            return json_encode([
+                'status' =>409,
+                'message'=>'user aleady exist!',
+                'token'=>$token,
+                'success'=>$user
+            ]);
+        }
   
        if($validator->fails()){
            $errors = $validator->errors();
-           return json_encode(['status'=>0,'errors'=>$errors]);
+           return json_encode([
+               'status'=>0,
+               'errors'=>$errors,
+               'success'=>$request->all()
+               ]);
        }
 
        if ($request->hasFile('profile_image')){
@@ -96,7 +113,7 @@ class GamerController extends Controller
      */
     public function show($id)
     {
-        $user = Gamer::where('social_id','=',$id)->first();
+        $user = Gamer::where('id','=',$id)->first();
         if(!empty($user)){
             $token = $user->createToken('api-token')->plainTextToken;
 
@@ -142,7 +159,7 @@ class GamerController extends Controller
 
     public function isUserExist($id)
     {
-        $user = Gamer::where('id','=',$id)->first();
+        $user = Gamer::where('phone','=',$id)->first();
         
 
         if(!empty($user)){

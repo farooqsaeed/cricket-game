@@ -32,6 +32,7 @@ use App\Http\Controllers\AuthController;
 */
 
 
+
 // routes without auth
 Route::prefix('v1')->group(function () {
 
@@ -128,9 +129,10 @@ Route::prefix('v1')->group(function () {
 
         // update team logi
         Route::post('upload/team/logo/{id}',[TeamController::class,'uploadicon']);
-        
-            
-    
+
+        // team with player
+        Route::get('teams/players',[EventController::class,'TeamWithPlayer']);
+         
 });
 
 

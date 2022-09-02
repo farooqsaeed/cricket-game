@@ -114,4 +114,15 @@ class TeamController extends Controller
             'message'=>'team not found!',
         ],204);
     }
+
+    // team with player
+
+    public function TeamWithPlayer()
+    {
+       $players = Team::with('players')->get();
+
+       return json_encode([
+        'success'=>$players
+       ],200);
+    }
 }
