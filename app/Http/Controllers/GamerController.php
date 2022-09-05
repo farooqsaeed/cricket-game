@@ -168,6 +168,7 @@ class GamerController extends Controller
                 'status' =>true,
                 'message'=>'user found!',
                 'token'=>$token,
+                'success'=>$user
             ],200);
         }
 
