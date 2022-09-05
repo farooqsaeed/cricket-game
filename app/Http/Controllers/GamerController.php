@@ -159,21 +159,20 @@ class GamerController extends Controller
 
     public function isUserExist($id)
     {
-        $user = Gamer::where('phone','=',$id)->first();
+        $user = Gamer::where('social_id','=',$id)->first();
         
 
         if(!empty($user)){
             $token = $user->createToken('api-token')->plainTextToken;
             return json_encode([
-                'status' =>200,
+                'status' =>true,
                 'message'=>'user found!',
                 'token'=>$token,
-                'success'=>$user
-            ]);
+            ],200);
         }
 
         return json_encode([
-            'status' =>204,
+            'status' =>false,
             'message'=>'user record not found!',
         ],204);
     }
