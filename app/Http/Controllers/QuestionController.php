@@ -126,9 +126,7 @@ class QuestionController extends Controller
              }
         }
 
-        usort($users,function($first,$second){
-            return $first->points < $second->points;
-        });
+        
 
         return json_encode([
             'message'=>'Record Found',
