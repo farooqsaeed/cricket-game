@@ -78,15 +78,19 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        $array = [2, 1, 22, 1, 3, 134, 3, 43, 23, 4];
-        rsort($array);
-        return $array;
-        // 6,8,9,10,14
-        
+
         $users = array();
         $usersId = array();
         $QnId = array();
-        $answers = Answer::where('status','=',true)
+        
+        $schedule = Schedule::where('id','=',$id)->with('questions')->get(); 
+        $items = $schedule[0]->questions;
+        foreach($items as $item){
+            $QnId[] = $item->pivot->question_id;
+        }
+        $result = Question::whereIn('id',$QnId)->select('id','Qn')->withCount('answers')->get();
+
+        $answers = Answer::where('status','=',true)->whereIn('question_id',$QnId)
         ->with(['point_category' => function($query){
             $query->sum('No');
          }])->get();
@@ -121,13 +125,10 @@ class QuestionController extends Controller
                  }
              }
         }
-        
-        $schedule = Schedule::where('id','=',$id)->with('questions')->get(); 
-        $items = $schedule[0]->questions;
-        foreach($items as $item){
-            $QnId[] = $item->pivot->question_id;
-        }
-        $result = Question::whereIn('id',$QnId)->select('id','Qn')->withCount('answers')->get();
+
+        usort($users,function($first,$second){
+            return $first->points < $second->points;
+        });
 
         return json_encode([
             'message'=>'Record Found',
