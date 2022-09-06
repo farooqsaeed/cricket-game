@@ -78,6 +78,11 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
+        $array = [2, 1, 22, 1, 3, 134, 3, 43, 23, 4];
+        rsort($array);
+        return $array;
+        // 6,8,9,10,14
+        
         $users = array();
         $usersId = array();
         $QnId = array();

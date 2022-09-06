@@ -52,6 +52,11 @@ Route::prefix('v1')->group(function () {
     Route::apiResources([
         'game/user' => GamerController::class,
     ]);
+
+    // question route
+    Route::apiResources([
+        'question' => QuestionController::class,
+    ]);
     
 });
 
@@ -97,10 +102,7 @@ Route::prefix('v1')->group(function () {
             'player' => PlayerController::class,
         ]);
 
-        // question route
-        Route::apiResources([
-            'question' => QuestionController::class,
-        ]);
+        
     
         // schedule route
         Route::apiResources([

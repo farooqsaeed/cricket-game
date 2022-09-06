@@ -154,7 +154,11 @@ class GamerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Gamer::where('id','=',$id)->delete();
+
+        return json_encode([
+            'message'=>'record deleted successfully!',
+        ],200);
     }
 
     public function isUserExist($id)
