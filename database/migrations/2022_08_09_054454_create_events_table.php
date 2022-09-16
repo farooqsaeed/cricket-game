@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('start_date');
             $table->string('end_date');
+            $table->string('host_country');
             $table->timestamps();
         });
     }

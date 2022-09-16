@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('correct_option')->nullable();
             $table->string('type')->nullable();
             $table->integer('timebound')->nullable();
+            $table->boolean('is_Active')->default(false);
             $table->timestamps();
         });
     }

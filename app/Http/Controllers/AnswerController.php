@@ -65,22 +65,24 @@ class AnswerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $update = Question::where('id','=',$id)->update([
+        if(!Auth::User()->can('write-question')){
+            return back()->with('error','you have not the permission to perform this operation'); 
+        }
+
+        $update = Question::where('id','=',$request->id)->update([
             'correct_option'=>$request->correct_option
         ]);
 
         if($update){
-            Answer::where('question_id','=',$id)
+            Answer::where('question_id','=',$request->id)
             ->where('respond_answer','=',$request->correct_option)->update([
                 'status'=>true
             ]);
         }
 
-        return json_encode([
-            'message'=>'Record updated successfully',
-        ],200);
+        return back()->with('success','answer stored successfully'); 
 
     }
 

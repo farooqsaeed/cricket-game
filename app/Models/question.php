@@ -37,10 +37,5 @@ class Question extends Model
         return $this->belongsTo(point_category::class);
     }
 
-    public function schedules()
-    {
-        return $this->belongsToMany(schedule::class);
-    }
-
     
 }

@@ -18,11 +18,8 @@ class ChallengeController extends Controller
      */
     public function index()
     {
-       $response = Challenge::all();
-       return json_encode([
-        'message'=>'record found!',
-        'success'=>$response
-       ],200);
+       $challenges = Challenge::all();
+       return view('Challenge.index',compact('challenges'));
     }
 
     /**
@@ -33,15 +30,22 @@ class ChallengeController extends Controller
      */
     public function store(Request $request)
     {
+        if(!Auth::User()->can('write-challenges')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
         $validator = Validator::make($request->all(), [
             'overs' => 'required',
             'runs'=> 'required',
          ]);
+        
    
         if($validator->fails()){
-            $errors = $validator->errors();
-            return json_encode(['status'=>0,'errors'=>$errors]);
+            return redirect()->route('challenge.create')
+                    ->withErrors($validator)
+                    ->withInput();
         }
+   
 
         $challenge = Challenge::create(
             array(
@@ -50,10 +54,7 @@ class ChallengeController extends Controller
             )
         );
 
-        return json_encode([
-            'message'=>'challenge registered successfully',
-            'success'=>$challenge
-        ],200);
+        return redirect()->route('challenge.list')->with('success','Challenge Added Successfully.');
     }
 
     /**
@@ -67,6 +68,12 @@ class ChallengeController extends Controller
         //
     }
 
+    public function edit($id)
+    {
+       $challenge = Challenge::where('id','=',$id)->first();
+        return view('Challenge.edit',compact('challenge'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -76,7 +83,14 @@ class ChallengeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Challenge::where('id','=',$id)->update(
+            array(
+                'overs' => $request->overs,
+                'runs' => $request->runs
+            )
+        );
+
+        return redirect()->route('challenge.list')->with('success','Challenge Added Successfully.');
     }
 
     /**
@@ -87,6 +101,11 @@ class ChallengeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!Auth::User()->can('write-challenges')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+        
+        Challenge::where('id','=',$id)->delete();
+        return redirect()->route('challenge.list')->with('success','Challenge deleted Successfully.');
     }
 }

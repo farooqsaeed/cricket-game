@@ -9,24 +9,27 @@ use Validator;
 
 class AuthController extends Controller
 {
-    public function doLogin()
+    public function doLogin(Request $request)
     {
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
-            $user = Auth::user(); 
-            $token = $user->createToken('api-token')->plainTextToken;
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password'=> 'required'
+         ]);
+   
+         if($validator->fails()){
+            return redirect()->route('login')
+                    ->withErrors($validator)
+                    ->withInput();
+        }
 
-            return json_encode([
-                'error' => false,
-                'message'=>'user login successfully',
-                'token'=>$token,
-                'success'=>$user
-            ],200);
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
+            // $user = Auth::user(); 
+            return redirect('/dashboard/event/schedule');
+            // $token = $user->createToken('api-token')->plainTextToken;
+            
         }else{
-            return json_encode([
-                'error' => true,
-                'message'=>'You have entered an invalid username or password',
-            ],401);
-        } 
+            return redirect()->route('login')->with('error','email or password is incorrect');
+        }
     }
 
 }

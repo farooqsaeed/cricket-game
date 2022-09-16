@@ -10,7 +10,7 @@ class Schedule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type',
+        'M_type',
         'team_1',
         'team_2',
         'date_at',
@@ -28,11 +28,6 @@ class Schedule extends Model
     public function event()
     {
         return $this->belongsTo(Event::class);
-    }
-
-    public function questions()
-    {
-        return $this->belongsToMany(Question::class);
     }
 
     public function gamers() {

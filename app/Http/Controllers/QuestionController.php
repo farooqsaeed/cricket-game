@@ -9,6 +9,8 @@ use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Schedule;
 use App\Models\Gamer;
+use App\Models\point_category;
+use Carbon\Carbon;
 use Validator;
 
 class QuestionController extends Controller
@@ -20,11 +22,9 @@ class QuestionController extends Controller
      */
     public function index()
     {
-       $result = Question::orderBy('id','DESC')->get();
-       return json_encode([
-            'message'=>'Record Found!',
-            'success'=>$result
-        ],200);
+       $actives = Question::where('is_Active','=',true)->orderBy('id','DESC')->get();
+       $inactives = Question::where('is_Active','=',false)->orderBy('id','DESC')->get();
+       return view('Question.index',compact('actives','inactives'));
     }
 
     /**
@@ -35,10 +35,14 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+
+        if(!Auth::User()->can('write-question')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
         $validator = Validator::make($request->all(), [
             'point_category_id' => 'required',
-            'schedule_id' => 'required',
-            'Qn' => 'required',
+            'question' => 'required',
             'option_1' => 'required',
             'option_2' => 'required',
             'type' => 'required',
@@ -46,15 +50,16 @@ class QuestionController extends Controller
          ]);
    
         if($validator->fails()){
-            $errors = $validator->errors();
-            return json_encode(['status'=>0,'errors'=>$errors]);
+            return redirect()->route('events.create')
+                    ->withErrors($validator)
+                    ->withInput();
         }
 
         $question = Question::create(
             array(
                 'point_category_id' => $request->point_category_id,
                 'schedule_id' => $request->schedule_id,
-                'Qn' => $request->Qn,
+                'Qn' => $request->question,
                 'option_1' => $request->option_1,
                 'option_2' => $request->option_2,
                 'option_3' => $request->option_3,
@@ -64,10 +69,7 @@ class QuestionController extends Controller
             )
         );
 
-        return json_encode([
-            'message'=>'Question created successfully',
-            'success'=>$question
-        ],200);
+        return redirect()->route('questions.list')->with('success','Question Added Successfully.');
     }
 
     /**
@@ -78,19 +80,14 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-
+        // 
         $users = array();
         $usersId = array();
         $QnId = array();
-        
-        $schedule = Schedule::where('id','=',$id)->with('questions')->get(); 
-        $items = $schedule[0]->questions;
-        foreach($items as $item){
-            $QnId[] = $item->pivot->question_id;
-        }
-        $result = Question::whereIn('id',$QnId)->select('id','Qn')->withCount('answers')->get();
 
-        $answers = Answer::where('status','=',true)->whereIn('question_id',$QnId)
+        $result = Question::where('is_Active','=',true)->withCount('answers')->get();
+
+        $answers = Answer::where('status','=',true)->whereDate('created_at', Carbon::today())
         ->with(['point_category' => function($query){
             $query->sum('No');
          }])->get();
@@ -126,13 +123,11 @@ class QuestionController extends Controller
              }
         }
 
-        
-
-        return json_encode([
-            'message'=>'Record Found',
-            'success'=>$result,
-            'winners'=>$users
-        ],200);
+        // $high = max($users);
+        $collection = collect($users);
+        $sorted = $collection->sortDesc();
+        $winners = $sorted->all();
+        return view('Dashboard.winners',compact('result','winners')); 
     }
 
     /**
@@ -142,9 +137,13 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        Question::where('id','=',$id)->update([
+        if(!Auth::User()->can('write-question')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
+        Question::where('id','=',$request->id)->update([
             'Qn' => $request->Qn,
             'option_1' => $request->option_1,
             'option_2' => $request->option_2,
@@ -154,9 +153,13 @@ class QuestionController extends Controller
             'type' => $request->type
         ]);
 
-        return json_encode([
-            'message'=>'Record Updated Successfully',
-        ],200);
+        return redirect()->route('questions.list')->with('success','Question updated Successfully.');
+    }
+
+    public function edit($id)
+    {
+        $question =  Question::where('id','=',$id)->first();
+        return view('Question.edit',compact('question'));
     }
 
     /**
@@ -167,10 +170,52 @@ class QuestionController extends Controller
      */
     public function destroy($id)
     {
+        if(!Auth::User()->can('write-question')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
         Question::where('id','=',$id)->delete();
 
-        return json_encode([
-            'message'=>'Record deleted Successfully',
-        ],200);
+        return redirect()->route('questions.list')->with('success','Question deleted Successfully.');
+    }
+
+   
+
+    public function activeBulk(Request $request)
+    {
+        if(!Auth::User()->can('write-question')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
+        $ids = $request->ids;
+        $no = explode(",",$ids);
+
+        Question::whereIn('id',$no)->update([
+            'is_Active' => true
+        ]);
+
+        return response()->json(['success'=>"questions activeted successfully."]);
+    }
+
+    public function inactiveBulk(Request $request)
+    {
+        if(!Auth::User()->can('write-question')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
+        $ids = $request->ids;
+        $no = explode(",",$ids);
+
+        Question::whereIn('id',$no)->update([
+            'is_Active' => false
+        ]);
+
+        return response()->json(['success'=>"questions deactiveted successfully."]);
+    }
+
+    public function getOptions($id)
+    {
+       $questions = Question::where('id','=',$id)->first();
+       return json_encode(['success'=>$questions]);
     }
 }

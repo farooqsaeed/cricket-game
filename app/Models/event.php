@@ -11,9 +11,10 @@ class Event extends Model
 
     protected $fillable = [
 		'name',
-		'type',
+		'M_type',
 		'start_date',
-        'end_date'
+        'end_date',
+        'host_country'
     ];
 
     protected $hidden = [

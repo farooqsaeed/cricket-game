@@ -19,10 +19,7 @@ class PlayerController extends Controller
     public function index()
     {
         $players = Player::with('Team')->orderBy('id', 'desc')->get();
-        return json_encode([
-            'message'=>'record found!',
-            'success'=>$players
-        ],200);
+        return view('Player.index',compact('players'));
     }
 
     /**
@@ -33,14 +30,19 @@ class PlayerController extends Controller
      */
     public function store(Request $request)
     {
+        if(!Auth::User()->can('write-players')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
         $validator = Validator::make($request->all(), [
             'team_id' => 'required',
             'name' => 'required'
          ]);
    
-        if($validator->fails()){
-            $errors = $validator->errors();
-            return json_encode(['status'=>0,'errors'=>$errors]);
+         if($validator->fails()){
+            return redirect()->route('player.create')
+                    ->withErrors($validator)
+                    ->withInput();
         }
 
         $player = Player::create(
@@ -50,10 +52,9 @@ class PlayerController extends Controller
             )
         );
 
-        return json_encode([
-            'message'=>'Player added successfully',
-            'success'=>$player
-        ],200);
+        return redirect()->route('player.list')->with('success','Player Added Successfully.');
+
+        
     }
 
     /**
@@ -67,6 +68,13 @@ class PlayerController extends Controller
         //
     }
 
+    public function edit($id)
+    {
+        $player = Player::where('id','=',$id)->first();
+        $teams = Team::all();
+        return view('Player.edit',compact('player','teams'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -76,13 +84,16 @@ class PlayerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(!Auth::User()->can('write-players')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
         Player::where('id','=',$id)->update([
+            'team_id' => $request->team_id,
             'name' => $request->name
         ]);
 
-        return json_encode([
-            'message'=>'player updated successfully',
-        ],200);
+        return redirect()->route('player.list')->with('success','player update successfully.');
 
     }
 
@@ -94,10 +105,12 @@ class PlayerController extends Controller
      */
     public function destroy($id)
     {
+        if(!Auth::User()->can('write-players')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+        
         Player::where('id','=',$id)->delete();
 
-        return json_encode([
-            'message'=>'player deleted successfully',
-        ],200);
+        return redirect()->route('player.list')->with('success','player delete successfully.');
     }
 }

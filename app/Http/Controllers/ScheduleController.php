@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Schedule;
 use App\Models\Question;
+use App\Models\Team;
 use Validator;
 use Carbon\Carbon;
 
@@ -32,6 +33,11 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+       
+        if(!Auth::User()->can('write-schedule')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
         $validator = Validator::make($request->all(), [
             'type' => 'required',
             'team_1' => 'required',
@@ -43,13 +49,14 @@ class ScheduleController extends Controller
          ]);
    
         if($validator->fails()){
-            $errors = $validator->errors();
-            return json_encode(['status'=>0,'errors'=>$errors]);
+            return redirect('/events/create-schedule/'.$request->event_id)
+            ->withErrors($validator)
+            ->withInput();
         }
 
         $schedule = Schedule::create(
             array(
-                'type' => $request->type,
+                'M_type' => $request->type,
                 'team_1' => $request->team_1,
                 'team_2' => $request->team_2,
                 'date_at' => $request->date_at,
@@ -60,14 +67,9 @@ class ScheduleController extends Controller
             )
         );
 
-        $question = Question::where('id','=',1)->first();
+       
 
-        $schedule->questions()->attach($question);
-
-        return json_encode([
-            'message'=>'schedule created successfully',
-            'success'=>$schedule
-        ],200);
+        return redirect('/events/schedule/'.$request->event_id)->with('success','Schedule Added Successfully.');
     }
 
     /**
@@ -78,11 +80,9 @@ class ScheduleController extends Controller
      */
     public function show($id)
     {
-        $schedules = Schedule::where('event_id','=',$id)->get();
-        return json_encode([
-            'message'=>'Record Found!',
-            'success'=>$schedules
-        ],200);
+        $teams = Team::where('id','=',$id)->get();
+        $schedules = Schedule::where('id','=',$id)->first();
+        return view('Event.editSchedule',compact('schedules','teams','id'));
     }
 
     /**
@@ -94,7 +94,23 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(!Auth::User()->can('write-schedule')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+        
+        $schedule = Schedule::where('id','=',$id)->update(
+            array(
+                'M_type' => $request->type,
+                'team_1' => $request->team_1,
+                'team_2' => $request->team_2,
+                'date_at' => $request->date_at,
+                'time_at' => $request->time_at,
+                'avenue' => $request->avenue,
+                'event_id' => $request->event_id,
+            )
+        );
+
+        return redirect('/events/schedule/'.$request->event_id)->with('success','Schedule updated Successfully.'); 
     }
 
     /**
@@ -105,7 +121,13 @@ class ScheduleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!Auth::User()->can('write-schedule')){
+            return back()->with('error','you have not the permission to perform this operation.'); 
+        }
+
+        Schedule::where('id','=',$id)->delete();
+
+        return back()->with('success','Schedule deleted Successfully.');
     }
 
     

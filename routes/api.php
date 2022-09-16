@@ -141,16 +141,11 @@ Route::prefix('v1')->group(function () {
 
 });
 
-Route::group(['middleware' => 'role:user'], function() {
-
-    Route::get('/user', function() {
- 
-       return 'Welcome...!!';
-       
-    });
- 
- });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
-// });
+// });http://127.0.0.1:8000/
+Route::fallback(function(){
+    return response()->json([
+        'message' => 'Route Not Found. If error persists, contact info@website.com'], 404);
+});
