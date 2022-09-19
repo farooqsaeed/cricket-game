@@ -17,6 +17,7 @@ use App\Http\Controllers\GamerController;
 use App\Http\Controllers\QuizChallengeController;
 use App\Http\Controllers\CountryCityController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,8 @@ use App\Http\Controllers\AuthController;
 Route::get('/', function () {
     return view('login');
 })->name('login');
+
+
 
 Route::get('/logout',function()
    {
@@ -237,6 +240,10 @@ Route::prefix('users')->group(function () {
 });
 
 
+Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
 
+Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
 
+Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
 
+Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');

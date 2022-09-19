@@ -77,7 +77,7 @@
                             
                         </div>
                         </form>
-                        <a href="#" class="link">Forgot Password?</a>
+                        <a href="{{ URL('forget-password') }}" class="link">Forgot Password?</a>
                     </div>
                 </div>
             </div>

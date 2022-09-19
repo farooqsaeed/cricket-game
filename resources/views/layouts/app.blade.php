@@ -153,7 +153,7 @@
                 <li>
                     <div class="user-info m-b-20">
                         <div>
-                            <img src="{{ URL::asset('assets/images/HumLogo.PNG') }}" alt="logo" width="60px" height="40px">
+                            <img src="{{ URL::asset('assets/images/HumLogo.png') }}" alt="logo" width="60px" height="40px">
                         </div>
                         <div class="detail">
                             <h6>{{Auth::User()->name}}</h6>
